@@ -1,14 +1,20 @@
 import mysql.connector as sqlc
 import sys
-
 mydb = sqlc.connect(host="localhost",user="root",password="Aswyog123@")
 cur=mydb.cursor()
-
 try:
     cur.execute("create database miniproject")
 except:
     pass
 
+def loginmenu(uname,upwd):
+    print("Dashboard")
+    print("=========")
+    print()
+    print("1. Enter the expense")
+    print("2. Show all expense")
+    print("3. Display expense by month")
+    print("4. Display expense by year")
 def login():
     us=input("Enter username:-")
     pw=input("Enter password:-")
@@ -22,6 +28,7 @@ def login():
             break
     if f==0:
         print("Invalid username or password")
+
 def signup():
     cur.execute("use miniproject")
     username=input("Enter user name:-")
@@ -33,7 +40,6 @@ def signup():
     cur.execute("commit")
     print("Data entered successfully")
     
-
 def loginSignupMenu():
     print("Personal Expense Tracker")
     print("1.Login")
