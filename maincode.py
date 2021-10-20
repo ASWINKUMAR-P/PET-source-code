@@ -18,8 +18,10 @@ def login():
     for i in cur:
         if i[0]==us and i[1]==pw:
             print("Login successful")
-        else:
-            print("Invalid username or password")
+            f=1
+            break
+    if f==0:
+        print("Invalid username or password")
 def signup():
     cur.execute("use miniproject")
     username=input("Enter user name:-")
