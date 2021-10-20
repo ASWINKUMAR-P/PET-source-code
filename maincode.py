@@ -15,6 +15,10 @@ def loginmenu(uname,upwd):
     print("2. Show all expense")
     print("3. Display expense by month")
     print("4. Display expense by year")
+    print("5. Exit")
+    print()
+    c=input("Enter your choice :-")
+
 def login():
     us=input("Enter username:-")
     pw=input("Enter password:-")
@@ -28,6 +32,8 @@ def login():
             break
     if f==0:
         print("Invalid username or password")
+    elif f==1:
+        loginmenu(us,pw)
 
 def signup():
     cur.execute("use miniproject")
