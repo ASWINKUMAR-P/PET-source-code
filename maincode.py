@@ -13,9 +13,10 @@ def loginmenu(uname,upwd):
     print()
     print("1. Enter the expense")
     print("2. Show all expense")
-    print("3. Display expense by month")
-    print("4. Display expense by year")
-    print("5. Exit")
+    print("3. Display expense by day")
+    print("4. Display expense by month")
+    print("5. Display expense by year")
+    print("6. Exit")
     print()
     c=input("Enter your choice :-")
 
@@ -28,10 +29,12 @@ def login():
     for i in cur:
         if i[0]==us and i[1]==pw:
             print("Login successful")
+            print()
             f=1
             break
     if f==0:
         print("Invalid username or password")
+        print()
     elif f==1:
         loginmenu(us,pw)
 
