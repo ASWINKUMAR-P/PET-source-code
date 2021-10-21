@@ -21,9 +21,11 @@ try:
 except:
     pass
 try:
+    cur.execute("use miniproject")
     cur.execute("create table userdetails(username varchar(50) primary key, emailid varchar(50) not null, phone varchar(15) not null, pass varchar(50) not null, incomepermonth int not null)")
 except:
     pass
+
 def loginmenu(uname,upwd):
     print("Dashboard")
     print("=========")
