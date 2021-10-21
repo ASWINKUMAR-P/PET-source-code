@@ -7,7 +7,7 @@ def emailverivication(emailid):
     email=emailid
     num=ra.randint(100000,999999)
     server=sm.SMTP_SSL("smtp.gmail.com",465)
-    server.login("akthegreat003@gmail.com","akthegreat003")
+    server.login("personalexpensetrackerforusers@gmail.com","PETminiproject")
     msg="Hello user, your OTP is "+str(num)
     server.sendmail("akthegreat003@gmail.com",email,msg)
     return num
