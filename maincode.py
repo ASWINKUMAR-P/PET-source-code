@@ -15,11 +15,15 @@ def emailverivication(emailid):
 
 mydb = sqlc.connect(host="localhost",user="root",password="Aswyog123@")
 cur=mydb.cursor()
+
 try:
     cur.execute("create database miniproject")
 except:
     pass
-
+try:
+    cur.execute("create table userdetails(username varchar(50) primary key, emailid varchar(50) not null, phone varchar(15) not null, pass varchar(50) not null, incomepermonth int not null)")
+except:
+    pass
 def loginmenu(uname,upwd):
     print("Dashboard")
     print("=========")
