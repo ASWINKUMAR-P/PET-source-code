@@ -1,5 +1,18 @@
 import mysql.connector as sqlc
 import sys
+import smtplib as sm
+import random as ra
+
+def emailverivication(emailid):
+    email=emailid
+    num=ra.randint(100000,999999)
+    server=sm.SMTP_SSL("smtp.gmail.com",465)
+    server.login("akthegreat003@gmail.com","akthegreat003")
+    msg="Hello user, your OTP is "+str(num)
+    server.sendmail("akthegreat003@gmail.com",email,msg)
+    return num
+
+
 mydb = sqlc.connect(host="localhost",user="root",password="Aswyog123@")
 cur=mydb.cursor()
 try:
@@ -45,9 +58,17 @@ def signup():
     pno=int(input("Enter phone number:-"))
     incomepermonth=int(input("Enter average income per month:-"))
     password=input("Enter password:-")
-    cur.execute("insert into userdetails(username, emailid, phone, incomepermonth, pass ) values (%s, %s, %s, %s, %s)",(username,emailid,pno,incomepermonth,password))
-    cur.execute("commit")
-    print("Data entered successfully")
+    print()
+    orignalotp=emailverivication(emailid)
+    print("OTP has sent in your mail.\nEnter OTP for verification")
+    otp=int(input())
+    if otp==orignalotp:
+        cur.execute("insert into userdetails(username, emailid, phone, incomepermonth, pass ) values (%s, %s, %s, %s, %s)",(username,emailid,pno,incomepermonth,password))
+        cur.execute("commit")
+        print("Data entered successfully")
+    else:
+        print("Wrong OTP")
+        print("Account not created")
     
 def loginSignupMenu():
     print("Personal Expense Tracker")
