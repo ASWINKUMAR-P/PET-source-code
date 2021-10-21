@@ -15,7 +15,7 @@ Insert=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Rom
 
 empty2=tk.Label(dash,text=" ").grid(row=3,column=0)
 
-Label2= tk.Label(dash,text="Delete an expense:- ",font=("Times New Roman",16)).grid(row=4,column=0,sticky='w')
+Label2= tk.Label(dash,text="Show all the expenses:- ",font=("Times New Roman",16)).grid(row=4,column=0,sticky='w')
 Delete=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12)).grid(row=4,column=1)
 
 empty3=tk.Label(dash,text=" ").grid(row=5,column=0)
