@@ -71,6 +71,8 @@ def signup():
     if otp==orignalotp:
         cur.execute("insert into userdetails(username, emailid, phone, incomepermonth, pass ) values (%s, %s, %s, %s, %s)",(username,emailid,pno,incomepermonth,password))
         cur.execute("commit")
+        query="create table "+username+"(expensename varchar(20) not null, price int not null, dateofexpense date not null)"
+        cur.execute(query)
         print("Data entered successfully")
     else:
         print("Wrong OTP")
