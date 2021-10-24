@@ -57,11 +57,24 @@ def login(username,password):
         messagebox.showwarning("Warning","Fill all the entries")
         return
     else:
-        home.destroy()
-        dashboard()
+        cur.execute("use miniproject")
+        cur.execute("select username,pass from userdetails")
+        rows=cur.fetchall()
+        f=0
+        for i in rows:
+            if un==i[0] and pw==i[1]:
+                f=1
+                break
+        if f==1:
+            home.destroy()
+            dashboard()
+        else:
+            messagebox.showwarning("Warning","Invalid login credentials")                        
+
 ###########################################################################################################################################
 #Signup page
 def signuppage():
+
     home.destroy()
     signup=tk.Tk()
     signup.title("Create your account")
