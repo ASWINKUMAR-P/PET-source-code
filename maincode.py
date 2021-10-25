@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import datetime
 import re
+from tkinter.constants import END
 import mysql.connector as sqlc
 import sys
 
@@ -48,7 +49,7 @@ def create(signup,nameInput,emailInput,pnoInput,incomeInput,pwInput,cpwInput):
     cur.execute(query)
     messagebox.showinfo("Account created","Your account is created successfully")
     signup.destroy()
-    dashboard()
+    dashboard(name)
 
 def login(username,password):
     un=username.get()
@@ -67,10 +68,17 @@ def login(username,password):
                 break
         if f==1:
             home.destroy()
-            dashboard()
+            dashboard(un)
         else:
-            messagebox.showwarning("Warning","Invalid login credentials")                        
+            messagebox.showwarning("Warning","Invalid login credentials")
 
+def reset(nameInput,emailInput,pnoInput,incomeInput,pwInput,cpwInput):
+    nameInput.delete(0,END)
+    emailInput.delete(0,END)
+    pnoInput.delete(0,END)
+    incomeInput.delete(0,END)
+    pwInput.delete(0,END)
+    cpwInput.delete(0,END)
 ###########################################################################################################################################
 #Signup page
 def signuppage():
@@ -107,15 +115,16 @@ def signuppage():
     cpwInput.grid(row=12,column=1)
     empty1=    tk.Label(signup,text=" ").grid(row=13,column=0)
     Submit=tk.Button(signup,text="Submit",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda: create(signup,nameInput,emailInput,pnoInput,incomeInput,pwInput,cpwInput)).grid(row=14,column=0)
-    Reset =tk.Button(signup,text="Reset",padx=10,width=7,bg="red",font=("Times New Roman",12)).grid(row=14,column=1)
+    Reset =tk.Button(signup,text="Reset" ,padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda:  reset(nameInput,emailInput,pnoInput,incomeInput,pwInput,cpwInput)).grid(row=14,column=1)
     signup.mainloop()
 ###################################################################################################################################
 #Dashboard page creation
-def dashboard():
+def dashboard(username):
+    cur.execute("use miniproject")
     dash=tk.Tk()
     dash.geometry('500x500')
     dash.resizable(False,False)
-    dash.title("Home page")
+    dash.title(username)
     headLabel=tk.Label(dash,text="PERSONAL EXPENSE TRACKER",background="red",pady=10,font=("Impact",20),width=40).grid(row=0,column=0,columnspan=2)
     empty1=tk.Label(dash,text=" ").grid(row=1,column=0)
     Label1= tk.Label(dash,text="Add an expense:- ",font=("Times New Roman",16)).grid(row=2,column=0,sticky='w')
