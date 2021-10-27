@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter.constants import END
 from tkinter import StringVar, messagebox
 import datetime
 import re
@@ -10,7 +11,10 @@ choice =["Food","Groceries","EMI","RENT","EB bill","Gas bill","Water","Shopping"
 def submit(expensenameInput,expenseamountInput,expensepriceInput):
     pass
 def reset(expensenameInput,expenseamountInput,expensepriceInput):
-    pass
+    try:
+        expenseamountInput.delete(0,END)
+    except:
+        pass
 
 enter=tk.Tk()
 enter.geometry('500x500')
@@ -32,14 +36,14 @@ expenseamountInput= tk.Entry(enter,width=18,font=("Times New Roman",18))
 expenseamountInput.grid(row=4,column=1,sticky='w')
 empty1=tk.Label(enter,text=" ").grid(row=5,column=0,columnspan=2)
 
-expensepricelabel= tk.Label(enter,text="Select date :- ",font=("Times New Roman",16)).grid(row=6,column=0,sticky='w')
-expensepriceInput= tkc.DateEntry(enter,width=18,font=("Times New Roman",16))
-expensepriceInput.grid(row=6,column=1,sticky='w')
+expensedatelabel= tk.Label(enter,text="Select date :- ",font=("Times New Roman",16)).grid(row=6,column=0,sticky='w')
+expensedateInput= tkc.DateEntry(enter,width=18,font=("Times New Roman",16))
+expensedateInput.grid(row=6,column=1,sticky='w')
 empty1=tk.Label(enter,text=" ").grid(row=8,column=0,columnspan=2)
 empty2=tk.Label(enter,text=" ").grid(row=9,column=0,columnspan=2)
 empty3=tk.Label(enter,text=" ").grid(row=10,column=0,columnspan=2)
 
-submitbutton= tk.Button(enter,text="Submit",font=("Times New Roman",16),command=lambda: submit(expensenameInput,expenseamountInput,expensepriceInput)).grid(row=11,column=0)
-resetbutton=  tk.Button(enter,text="Reset", font=("Times New Roman",16),command=lambda: reset(expensenameInput,expenseamountInput,expensepriceInput)).grid(row=11,column=1)
+submitbutton= tk.Button(enter,text="Submit",font=("Times New Roman",16),command=lambda: submit(expensenameInput,expenseamountInput,expensedateInput)).grid(row=11,column=0)
+resetbutton=  tk.Button(enter,text="Reset", font=("Times New Roman",16),command=lambda: reset(expensenameInput,expenseamountInput,expensedateInput)).grid(row=11,column=1)
 
 enter.mainloop()
