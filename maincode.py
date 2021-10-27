@@ -27,12 +27,13 @@ def reset(expensenameInput,expenseamountInput,expensepriceInput):
         expenseamountInput.delete(0,END)
     except:
         pass
-def enterexpense():
+def enterexpense(dash,username):
+    dash.destroy()
     choice =["Food","Groceries","EMI","RENT","EB bill","Gas bill","Water","Shopping","Movies","Tour","Snacks","WIFI","Others"]
     enter=tk.Tk()
     enter.geometry('500x500')
+    enter.title(username)
     enter.resizable(False,False)
-    enter.title("PET Login or Signup")
     head=tk.Label(enter,text="Personal Expense Tracker",pady=10,font=("Impact",20),background="red",width=40).grid(row=0,column=0,columnspan=2)
     empty1=tk.Label(enter,text=" ").grid(row=1,column=0,columnspan=2)
 
@@ -56,8 +57,8 @@ def enterexpense():
     empty2=tk.Label(enter,text=" ").grid(row=9,column=0,columnspan=2)
     empty3=tk.Label(enter,text=" ").grid(row=10,column=0,columnspan=2)
 
-    submitbutton= tk.Button(enter,text="Submit",font=("Times New Roman",16),command=lambda: submit(expensenameInput,expenseamountInput,expensedateInput)).grid(row=11,column=0)
-    resetbutton=  tk.Button(enter,text="Reset", font=("Times New Roman",16),command=lambda: reset(expensenameInput,expenseamountInput,expensedateInput)).grid(row=11,column=1)
+    submitbutton= tk.Button(enter,text="Submit",font=("Times New Roman",16),bg="red",command=lambda: submit(expensenameInput,expenseamountInput,expensedateInput)).grid(row=11,column=0)
+    resetbutton=  tk.Button(enter,text="Reset", font=("Times New Roman",16),bg="red",command=lambda: reset(expensenameInput,expenseamountInput,expensedateInput)).grid(row=11,column=1)
 
     enter.mainloop()
 def create(signup,nameInput,emailInput,pnoInput,incomeInput,pwInput,cpwInput):
@@ -168,7 +169,7 @@ def dashboard(username):
     headLabel=tk.Label(dash,text="PERSONAL EXPENSE TRACKER",background="red",pady=10,font=("Impact",20),width=40).grid(row=0,column=0,columnspan=2)
     empty1=tk.Label(dash,text=" ").grid(row=1,column=0)
     Label1= tk.Label(dash,text="Add an expense:- ",font=("Times New Roman",16)).grid(row=2,column=0,sticky='w')
-    Insert=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12)).grid(row=2,column=1)
+    Insert=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda: enterexpense(dash,username)).grid(row=2,column=1)
     empty2=tk.Label(dash,text=" ").grid(row=3,column=0)
     Label2= tk.Label(dash,text="Show all the expenses:- ",font=("Times New Roman",16)).grid(row=4,column=0,sticky='w')
     Delete=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12)).grid(row=4,column=1)
