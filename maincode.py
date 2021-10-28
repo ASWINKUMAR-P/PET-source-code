@@ -10,6 +10,7 @@ from tkcalendar import DateEntry
 
 mydb = sqlc.connect(host="localhost",user="root",password="Aswyog123@")
 cur=mydb.cursor()
+
 try:
     cur.execute("create database miniproject")
 except:
@@ -20,9 +21,17 @@ try:
 except:
     pass
 
-def submit(expensenameInput,expenseamountInput,expensepriceInput):
-    pass
-def reset(expensenameInput,expenseamountInput,expensepriceInput):
+def submitexpense(username,expensenameInput,expenseamountInput,expensedateInput):
+    name=expensenameInput.get()
+    amount=expenseamountInput.get()
+    date=expensedateInput.get_date()
+    username.replace("\'","")
+    cur.execute("use miniproject")
+    sql="insert into "+username+"(expensename, price, dateofexpense) values(%s,%s,%s)"
+    cur.execute(sql,(name,amount,date))
+    cur.execute("commit")
+    messagebox.showinfo("Data saved","Your data entered successfully")
+def resetexpense(expensenameInput,expenseamountInput,expensedateInput):
     try:
         expenseamountInput.delete(0,END)
     except:
@@ -57,8 +66,8 @@ def enterexpense(dash,username):
     empty2=tk.Label(enter,text=" ").grid(row=9,column=0,columnspan=2)
     empty3=tk.Label(enter,text=" ").grid(row=10,column=0,columnspan=2)
 
-    submitbutton= tk.Button(enter,text="Submit",font=("Times New Roman",16),bg="red",command=lambda: submit(expensenameInput,expenseamountInput,expensedateInput)).grid(row=11,column=0)
-    resetbutton=  tk.Button(enter,text="Reset", font=("Times New Roman",16),bg="red",command=lambda: reset(expensenameInput,expenseamountInput,expensedateInput)).grid(row=11,column=1)
+    submitbutton= tk.Button(enter,text="Submit",font=("Times New Roman",16),bg="red",command=lambda: submitexpense(username,opt,expenseamountInput,expensedateInput)).grid(row=11,column=0)
+    resetbutton=  tk.Button(enter,text="Reset", font=("Times New Roman",16),bg="red",command=lambda: resetexpense(expensenameInput,expenseamountInput,expensedateInput)).grid(row=11,column=1)
 
     enter.mainloop()
 def create(signup,nameInput,emailInput,pnoInput,incomeInput,pwInput,cpwInput):
