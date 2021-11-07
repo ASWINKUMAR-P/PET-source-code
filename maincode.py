@@ -21,7 +21,7 @@ try:
 except:
     pass
 
-def submitexpense(username,expensenameInput,expenseamountInput,expensedateInput):
+def submitexpense(enter,username,expensenameInput,expenseamountInput,expensedateInput):
     name=expensenameInput.get()
     amount=expenseamountInput.get()
     date=expensedateInput.get_date()
@@ -31,6 +31,8 @@ def submitexpense(username,expensenameInput,expenseamountInput,expensedateInput)
     cur.execute(sql,(name,amount,date))
     cur.execute("commit")
     messagebox.showinfo("Data saved","Your data entered successfully")
+    enter.destroy()
+    dashboard(username)
 def resetexpense(expensenameInput,expenseamountInput,expensedateInput):
     try:
         expenseamountInput.delete(0,END)
@@ -66,7 +68,7 @@ def enterexpense(dash,username):
     empty2=tk.Label(enter,text=" ").grid(row=9,column=0,columnspan=2)
     empty3=tk.Label(enter,text=" ").grid(row=10,column=0,columnspan=2)
 
-    submitbutton= tk.Button(enter,text="Submit",font=("Times New Roman",16),bg="red",command=lambda: submitexpense(username,opt,expenseamountInput,expensedateInput)).grid(row=11,column=0)
+    submitbutton= tk.Button(enter,text="Submit",font=("Times New Roman",16),bg="red",command=lambda: submitexpense(enter,username,opt,expenseamountInput,expensedateInput)).grid(row=11,column=0)
     resetbutton=  tk.Button(enter,text="Reset", font=("Times New Roman",16),bg="red",command=lambda: resetexpense(expensenameInput,expenseamountInput,expensedateInput)).grid(row=11,column=1)
 
     enter.mainloop()
