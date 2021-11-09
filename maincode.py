@@ -7,10 +7,9 @@ import mysql.connector as sqlc
 import sys
 import tkcalendar as tkc
 from tkcalendar import DateEntry
-
+###################################################################################################################################################################
 mydb = sqlc.connect(host="localhost",user="root",password="Aswyog123@")
 cur=mydb.cursor()
-
 try:
     cur.execute("create database miniproject")
 except:
@@ -20,7 +19,7 @@ try:
     cur.execute("create table userdetails(username varchar(50) primary key, emailid varchar(50) not null, phone varchar(15) not null, pass varchar(50) not null, incomepermonth int not null)")
 except:
     pass
-
+######################################################################################################################################################################
 def submitexpense(enter,username,expensenameInput,expenseamountInput,expensedateInput):
     name=expensenameInput.get()
     amount=expenseamountInput.get()
@@ -33,11 +32,13 @@ def submitexpense(enter,username,expensenameInput,expenseamountInput,expensedate
     messagebox.showinfo("Data saved","Your data entered successfully")
     enter.destroy()
     dashboard(username)
+#########################################################################################################################################################################
 def resetexpense(expensenameInput,expenseamountInput,expensedateInput):
     try:
         expenseamountInput.delete(0,END)
     except:
         pass
+####################################################################################################################################################################
 def enterexpense(dash,username):
     dash.destroy()
     choice =["Food","Groceries","EMI","RENT","EB bill","Gas bill","Water","Shopping","Movies","Tour","Snacks","WIFI","Others"]
@@ -72,6 +73,7 @@ def enterexpense(dash,username):
     resetbutton=  tk.Button(enter,text="Reset", font=("Times New Roman",16),bg="red",command=lambda: resetexpense(expensenameInput,expenseamountInput,expensedateInput)).grid(row=11,column=1)
 
     enter.mainloop()
+########################################################################################################################################################################
 def create(signup,nameInput,emailInput,pnoInput,incomeInput,pwInput,cpwInput):
     name=nameInput.get()
     email=emailInput.get()
@@ -104,6 +106,7 @@ def create(signup,nameInput,emailInput,pnoInput,incomeInput,pwInput,cpwInput):
     messagebox.showinfo("Account created","Your account is created successfully")
     signup.destroy()
     dashboard(name)
+#############################################################################################################################################################
 def login(username,password):
     un=username.get()
     pw=password.get()
@@ -124,6 +127,7 @@ def login(username,password):
             dashboard(un)
         else:
             messagebox.showwarning("Warning","Invalid login credentials")
+############################################################################################################################################################
 def reset(nameInput,emailInput,pnoInput,incomeInput,pwInput,cpwInput):
     nameInput.delete(0,END)
     emailInput.delete(0,END)
