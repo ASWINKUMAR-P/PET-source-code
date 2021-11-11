@@ -23,6 +23,10 @@ except:
 def gotoHome(page):
     page.destroy()
     Home()
+####################################################################################################################################################################
+def gotoDash(page,username):
+    page.destroy()
+    dashboard(username)
 #############################################################################################################################################
 def displayexpense(dash,username):
     dash.destroy()
@@ -52,7 +56,7 @@ def displayexpense(dash,username):
     col2=tk.Label(second_frame,text="Date",font=("Times New Roman",16)).grid(row=2,column=1)
     col3=tk.Label(second_frame,text="Expense name",font=("Times New Roman",16)).grid(row=2,column=2)
     col4=tk.Label(second_frame,text="Price",font=("Times New Roman",16)).grid(row=2,column=3)
-    empty1=tk.Label(second_frame,text=" ").grid(row=3,column=0,columnspan=4)
+    empty2=tk.Label(second_frame,text=" ").grid(row=3,column=0,columnspan=4)
     j=0
     k=0
     for i in (rows):
@@ -63,6 +67,10 @@ def displayexpense(dash,username):
         e=tk.Label(second_frame,text=" ").grid(row=j+2,column=0,columnspan=4)
         j=j+2
         k=k+1
+    empty3=tk.Label(second_frame,text=" ").grid(row=j+4,column=0,columnspan=4)
+    Back=tk.Button(second_frame,text="Back",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda:gotoDash(display,username)).grid(row=j+5,column=0,columnspan=2)
+    Logout=tk.Button(second_frame,text="Logout",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda:gotoHome(display)).grid(row=j+5,column=2,columnspan=2)
+    empty4=tk.Label(second_frame,text=" ").grid(row=j+6,column=0,columnspan=4)
     display.mainloop()
 ######################################################################################################################################################################
 def submitexpense(enter,username,expensenameInput,expenseamountInput,expensedateInput):
