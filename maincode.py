@@ -8,7 +8,7 @@ import sys
 import tkcalendar as tkc
 from tkcalendar import DateEntry
 ###################################################################################################################################################################
-mydb = sqlc.connect(host="localhost",user="root",password="1945 ")
+mydb = sqlc.connect(host="localhost",user="root",password="1945")
 cur=mydb.cursor()
 try:
     cur.execute("create database miniproject")
@@ -101,36 +101,56 @@ def displayexpensemonth(dash,username):
     opy=StringVar(second_frame)
     opy.set(years[0])
 
-    head=tk.Label(second_frame,text="Personal Expense Tracker",pady=10,font=("Impact",20),background="red",width=40).grid(row=0,column=0,columnspan=3)
-    empty1=tk.Label(second_frame,text=" ").grid(row=1,column=0,columnspan=3)
+    head=tk.Label(second_frame,text="Personal Expense Tracker",pady=10,font=("Impact",20),background="red",width=40).grid(row=0,column=0,columnspan=4)
+    empty1=tk.Label(second_frame,text=" ").grid(row=1,column=0,columnspan=4)
 
     yearlabel= tk.Label(second_frame,text="Enter year :- ",font=("Times New Roman",16)).grid(row=2,column=0,sticky='w')
     yearinput= tk.OptionMenu(second_frame,opy,*years)
     yearinput.config(width=10,font=("Times New Roman",16))
-    yearinput.grid(row=2,column=1)
+    yearinput.grid(row=2,column=1,sticky='w')
     
     monthlabel= tk.Label(second_frame,text="Enter month :- ",font=("Times New Roman",16)).grid(row=3,column=0,sticky='w')
     monthinput= tk.OptionMenu(second_frame,opm,*months)
     monthinput.config(width=10,font=("Times New Roman",16))
-    monthinput.grid(row=3,column=1)
+    monthinput.grid(row=3,column=1,sticky='w')
+        
+    empty2=tk.Label(second_frame,text=" ").grid(row=4,column=0,columnspan=4)
+    enterbutton=tk.Button(second_frame,text="Display",padx=10,width=7,bg="red",font=("Times New Roman",12),command= lambda: displaymonth(username,second_frame,months,opm,opy)).grid(row=5,column=1,sticky='w')
     
+    empty3=tk.Label(second_frame,text=" ").grid(row=6,column=0,columnspan=4)
+    
+    col1=tk.Label(second_frame,text="S.No",font=("Times New Roman",16)).grid(row=7,column=0)
+    col2=tk.Label(second_frame,text="Date",font=("Times New Roman",16)).grid(row=7,column=1)
+    col3=tk.Label(second_frame,text="Expense name",font=("Times New Roman",16)).grid(row=7,column=2)
+    col4=tk.Label(second_frame,text="Price",font=("Times New Roman",16)).grid(row=7,column=3)
+    
+    empty4=tk.Label(second_frame,text=" ").grid(row=8,column=0,columnspan=4)
+    
+    display_month.mainloop()
+###########################################################################################################################################
+def displaymonth(username,second_frame,months,opm,opy):
     m=opm.get()
     y=opy.get()
     y=y.replace("(","")
     y=y.replace(")","")
     y=y.replace(",","")
-
     print(m,y)
-    q="select expensename, sum(price) from "+username+" where MONTH(dateofexpense)="+str(months.index(m)+1)+" where YEAR(dateofexpense)="+str(y)+"group by(expensename);"
-    empty2=tk.Label(second_frame,text=" ").grid(row=4,column=0,columnspan=3)
-    enterbutton=tk.Button(second_frame,text="Display",padx=10,width=7,bg="red",font=("Times New Roman",12)).grid(row=5,column=1)
-    empty3=tk.Label(second_frame,text=" ").grid(row=7,column=0,columnspan=3)
-    col1=tk.Label(second_frame,text="S.No",font=("Times New Roman",16)).grid(row=8,column=0,sticky='w')
-    col2=tk.Label(second_frame,text="Expense name",font=("Times New Roman",16)).grid(row=8,column=1,sticky='w')
-    col3=tk.Label(second_frame,text="Amount",font=("Times New Roman",16)).grid(row=8,column=2,sticky='w')
-    empty4=tk.Label(second_frame,text=" ").grid(row=9,column=0,columnspan=3)
-    cur.execute(q)
 
+    q='select * from '+username+' where MONTH(dateofexpense)='+str(months.index(m)+1)+' and YEAR(dateofexpense)='+str(y)+';'
+
+    cur.execute(q)
+    rows=cur.fetchall()
+    j=9
+    k=1  
+    for i in (rows):
+        r0=tk.Label(second_frame,text=str(k)+".",font=("Times New Roman",16)).grid(row=j+1,column=0)
+        r1=tk.Label(second_frame,text=i[2],font=("Times New Roman",16)).grid(row=j+1,column=1)
+        r2=tk.Label(second_frame,text=i[0],font=("Times New Roman",16)).grid(row=j+1,column=2)
+        r3=tk.Label(second_frame,text=i[1],font=("Times New Roman",16)).grid(row=j+1,column=3)
+        e=tk.Label(second_frame,text=" ").grid(row=j,column=0,columnspan=4)
+        j=j+2
+        k=k+1
+    
 ######################################################################################################################################################################
 def submitexpense(enter,username,expensenameInput,expenseamountInput,expensedateInput):
     name=expensenameInput.get()
