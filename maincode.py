@@ -8,7 +8,7 @@ import sys
 import tkcalendar as tkc
 from tkcalendar import DateEntry
 ###################################################################################################################################################################
-mydb = sqlc.connect(host="localhost",user="root",password="1945")
+mydb = sqlc.connect(host="localhost",user="root",password="1945 ")
 cur=mydb.cursor()
 try:
     cur.execute("create database miniproject")
