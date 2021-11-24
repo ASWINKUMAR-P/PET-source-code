@@ -4,6 +4,7 @@ import datetime
 import re
 from tkinter.constants import BOTH, END, LEFT, RIGHT, VERTICAL, Y
 import mysql.connector as sqlc
+import sqlite3
 import sys
 import tkcalendar as tkc
 from tkcalendar import DateEntry
@@ -73,13 +74,61 @@ def displayexpense(dash,username):
     empty4=tk.Label(second_frame,text=" ").grid(row=j+6,column=0,columnspan=4)
     display.mainloop()
 #########################################################################################################################################
-def displayexpensemonth(dash,username):
+def getMonth(dash,username):
     dash.destroy()
-    display_month=tk.Tk()
-    display_month.geometry('550x550')
-    display_month.resizable(False,False)
-    display_month.title("Expense details")
-    main_frame=ttk.Frame(display_month)
+    getmonth=tk.Tk()
+    getmonth.geometry('500x500')
+    getmonth.resizable(False,False)
+    getmonth.title("Enter month")
+    
+    head=tk.Label(getmonth,text="Personal Expense Tracker",pady=10,font=("Impact",20),background="red",width=40).grid(row=0,column=0,columnspan=2)
+    empty1=tk.Label(getmonth,text=" ").grid(row=1,column=0,columnspan=2)
+    
+    months=["January","February","March","April","May","June","July","August","September","October","November","December"]
+    opm=StringVar(getmonth)
+    opm.set(months[0])
+
+    years=[]
+    query="select distinct(year(dateofexpense)) from "+username
+    cur.execute(query)
+    years=cur.fetchall()
+    opy=StringVar(getmonth)
+    opy.set(years[0])
+
+    yearlabel= tk.Label(getmonth,text="Enter year :- ",font=("Times New Roman",16)).grid(row=2,column=0,sticky='w')
+    yearinput= tk.OptionMenu(getmonth,opy,*years)
+    yearinput.config(width=10,font=("Times New Roman",16))
+    yearinput.grid(row=2,column=1,sticky='w')
+
+    empty2=tk.Label(getmonth,text=" ").grid(row=3,column=0,columnspan=2)
+    
+    monthlabel= tk.Label(getmonth,text="Enter month :- ",font=("Times New Roman",16)).grid(row=4,column=0,sticky='w')
+    monthinput= tk.OptionMenu(getmonth,opm,*months)
+    monthinput.config(width=10,font=("Times New Roman",16))
+    monthinput.grid(row=4,column=1,sticky='w')
+
+    empty3=tk.Label(getmonth,text=" ").grid(row=5,column=0,columnspan=2)
+    empty4=tk.Label(getmonth,text=" ").grid(row=6,column=0,columnspan=2)
+    
+    display=tk.Button(getmonth,text="Display",padx=10,width=10,bg="red",font=("Times New Roman",16),command= lambda: displayMonth(getmonth,username,opm,opy,months)).grid(row=7,column=0,columnspan=2)
+
+    getmonth.mainloop()
+################################################################################################################################################
+def displayMonth(getmonth,username,opm,opy,months):
+    getmonth.destroy()
+    
+    
+    m=opm.get()
+    y=opy.get()
+    y=y.replace("(","")
+    y=y.replace(")","")
+    y=y.replace(",","")
+
+    displaymonth=tk.Tk()
+    displaymonth.geometry('550x550')
+    displaymonth.resizable(False,False)
+    displaymonth.title("Expense details")
+    main_frame=ttk.Frame(displaymonth)
     main_frame.pack(fill=BOTH,expand=1)
     my_canvas=tk.Canvas(main_frame)
     my_canvas.pack(side=LEFT,fill=BOTH,expand=1)
@@ -89,68 +138,35 @@ def displayexpensemonth(dash,username):
     my_canvas.bind('<Configure>',lambda e:my_canvas.configure(scrollregion=my_canvas.bbox("all")))
     second_frame=ttk.Frame(my_canvas)
     my_canvas.create_window((0,0),window=second_frame,anchor="nw")
-
-    months=["January","February","March","April","May","June","July","August","September","October","November","December"]
-    opm=StringVar(second_frame)
-    opm.set(months[0])
-
-    years=[]
-    query="select distinct(year(dateofexpense)) from "+username
-    cur.execute(query)
-    years=cur.fetchall()
-    opy=StringVar(second_frame)
-    opy.set(years[0])
-
     head=tk.Label(second_frame,text="Personal Expense Tracker",pady=10,font=("Impact",20),background="red",width=40).grid(row=0,column=0,columnspan=4)
     empty1=tk.Label(second_frame,text=" ").grid(row=1,column=0,columnspan=4)
-
-    yearlabel= tk.Label(second_frame,text="Enter year :- ",font=("Times New Roman",16)).grid(row=2,column=0,sticky='w')
-    yearinput= tk.OptionMenu(second_frame,opy,*years)
-    yearinput.config(width=10,font=("Times New Roman",16))
-    yearinput.grid(row=2,column=1,sticky='w')
-    
-    monthlabel= tk.Label(second_frame,text="Enter month :- ",font=("Times New Roman",16)).grid(row=3,column=0,sticky='w')
-    monthinput= tk.OptionMenu(second_frame,opm,*months)
-    monthinput.config(width=10,font=("Times New Roman",16))
-    monthinput.grid(row=3,column=1,sticky='w')
-        
-    empty2=tk.Label(second_frame,text=" ").grid(row=4,column=0,columnspan=4)
-    enterbutton=tk.Button(second_frame,text="Display",padx=10,width=7,bg="red",font=("Times New Roman",12),command= lambda: displaymonth(username,second_frame,months,opm,opy)).grid(row=5,column=1,sticky='w')
-    
-    empty3=tk.Label(second_frame,text=" ").grid(row=6,column=0,columnspan=4)
-    
-    col1=tk.Label(second_frame,text="S.No",font=("Times New Roman",16)).grid(row=7,column=0)
-    col2=tk.Label(second_frame,text="Date",font=("Times New Roman",16)).grid(row=7,column=1)
-    col3=tk.Label(second_frame,text="Expense name",font=("Times New Roman",16)).grid(row=7,column=2)
-    col4=tk.Label(second_frame,text="Price",font=("Times New Roman",16)).grid(row=7,column=3)
-    
-    empty4=tk.Label(second_frame,text=" ").grid(row=8,column=0,columnspan=4)
-    
-    display_month.mainloop()
-###########################################################################################################################################
-def displaymonth(username,second_frame,months,opm,opy):
-    m=opm.get()
-    y=opy.get()
-    y=y.replace("(","")
-    y=y.replace(")","")
-    y=y.replace(",","")
-    print(m,y)
-
-    q='select * from '+username+' where MONTH(dateofexpense)='+str(months.index(m)+1)+' and YEAR(dateofexpense)='+str(y)+';'
-
-    cur.execute(q)
-    rows=cur.fetchall()
-    j=9
-    k=1  
+    query="select * from "+username+" where month(dateofexpense)="+str(months.index(m)+1)+" and year(dateofexpense)="+str(y)+" order by dateofexpense"
+    try:
+        cur.execute(query)
+        rows=cur.fetchall()
+    except:
+        print("Error")
+    col1=tk.Label(second_frame,text="S.No",font=("Times New Roman",16)).grid(row=2,column=0)
+    col2=tk.Label(second_frame,text="Date",font=("Times New Roman",16)).grid(row=2,column=1)
+    col3=tk.Label(second_frame,text="Expense name",font=("Times New Roman",16)).grid(row=2,column=2)
+    col4=tk.Label(second_frame,text="Price",font=("Times New Roman",16)).grid(row=2,column=3)
+    empty2=tk.Label(second_frame,text=" ").grid(row=3,column=0,columnspan=4)
+    j=0
+    k=0
     for i in (rows):
-        r0=tk.Label(second_frame,text=str(k)+".",font=("Times New Roman",16)).grid(row=j+1,column=0)
-        r1=tk.Label(second_frame,text=i[2],font=("Times New Roman",16)).grid(row=j+1,column=1)
-        r2=tk.Label(second_frame,text=i[0],font=("Times New Roman",16)).grid(row=j+1,column=2)
-        r3=tk.Label(second_frame,text=i[1],font=("Times New Roman",16)).grid(row=j+1,column=3)
-        e=tk.Label(second_frame,text=" ").grid(row=j,column=0,columnspan=4)
+        r0=tk.Label(second_frame,text=str(k+1)+".",font=("Times New Roman",16)).grid(row=j+4,column=0)
+        r1=tk.Label(second_frame,text=i[2],font=("Times New Roman",16)).grid(row=j+4,column=1)
+        r2=tk.Label(second_frame,text=i[0],font=("Times New Roman",16)).grid(row=j+4,column=2)
+        r3=tk.Label(second_frame,text=i[1],font=("Times New Roman",16)).grid(row=j+4,column=3)
+        e=tk.Label(second_frame,text=" ").grid(row=j+2,column=0,columnspan=4)
         j=j+2
         k=k+1
-    
+    empty3=tk.Label(second_frame,text=" ").grid(row=j+4,column=0,columnspan=4)
+    Back=tk.Button(second_frame,text="Back",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda:gotoDash(displaymonth,username)).grid(row=j+5,column=0,columnspan=2)
+    Logout=tk.Button(second_frame,text="Logout",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda:gotoHome(displaymonth)).grid(row=j+5,column=2,columnspan=2)
+    empty4=tk.Label(second_frame,text=" ").grid(row=j+6,column=0,columnspan=4)
+
+    displaymonth.mainloop()
 ######################################################################################################################################################################
 def submitexpense(enter,username,expensenameInput,expenseamountInput,expensedateInput):
     name=expensenameInput.get()
@@ -321,18 +337,15 @@ def dashboard(username):
     Label2= tk.Label(dash,text="    Show all the expenses:- ",font=("Times New Roman",16)).grid(row=4,column=0,sticky='w')
     Showall=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda: displayexpense(dash,username)).grid(row=4,column=1)
     empty3=tk.Label(dash,text=" ").grid(row=5,column=0)
-    Label3= tk.Label(dash,text="    Show all expenses by day:- ",font=("Times New Roman",16)).grid(row=6,column=0,sticky='w')
-    ShowByDay=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12)).grid(row=6,column=1)
+    Label3= tk.Label(dash,text="    Show all expenses by month:- ",font=("Times New Roman",16)).grid(row=6,column=0,sticky='w')
+    ShowByDay=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda: getMonth(dash,username)).grid(row=6,column=1)
     empty3=tk.Label(dash,text=" ").grid(row=7,column=0)
-    Label4= tk.Label(dash,text="    Show all expenses by month:- ",font=("Times New Roman",16)).grid(row=8,column=0,sticky='w')
-    ShowByMonth=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda: displayexpensemonth(dash,username)).grid(row=8,column=1)
-    empty3=tk.Label(dash,text=" ").grid(row=9,column=0)
-    Label5= tk.Label(dash,text="    Back to login page:- ",font=("Times New Roman",16)).grid(row=10,column=0,sticky='w')
-    Back=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda:gotoHome(dash)).grid(row=10,column=1)
-    empty4=tk.Label(dash,text=" ").grid(row=11,column=0)
-    Label6= tk.Label(dash,text="    Exit:- ",font=("Times New Roman",16)).grid(row=12,column=0,sticky='w')
-    Exit=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda: sys.exit(0)).grid(row=12,column=1)
-    empty5=tk.Label(dash,text=" ").grid(row=13,column=0)
+    Label4= tk.Label(dash,text="    Back to login page:- ",font=("Times New Roman",16)).grid(row=8,column=0,sticky='w')
+    Back=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda:gotoHome(dash)).grid(row=8,column=1)
+    empty4=tk.Label(dash,text=" ").grid(row=9,column=0)
+    Label5= tk.Label(dash,text="    Exit:- ",font=("Times New Roman",16)).grid(row=10,column=0,sticky='w')
+    Exit=tk.Button(dash,text="Enter",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda: sys.exit(0)).grid(row=10,column=1)  
+    empty5=tk.Label(dash,text=" ").grid(row=12,column=0)
     dash.mainloop()
 ####################################################################################################################################
 #Home page
