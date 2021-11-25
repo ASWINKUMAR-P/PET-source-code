@@ -168,7 +168,7 @@ def displayMonth(getmonth,username,opm,opy,months):
         j=j+2
         k=k+1
     e=tk.Label(second_frame,text=" ").grid(row=j+4,column=0,columnspan=4)
-    overallexpense=tk.Label(second_frame,text="Overall Expense",font=("Times New Roman",20)).grid(row=j+5,column=0,columnspan=2)
+    overallexpense=tk.Label(second_frame,text="Overall Expense",font=("Times New Roman",20)).grid(row=j+5,column=0,columnspan=2,sticky='w')
     q="select expensename, sum(price) from "+username+" where month(dateofexpense)="+str(months.index(m)+1)+" and year(dateofexpense)="+str(y)+" group by expensename"
     j=j+5
     k=0
@@ -202,8 +202,76 @@ def getDate(dash,username):
     head=tk.Label(getdate,text="Personal Expense Tracker",pady=10,font=("Impact",20),background="red",width=40).grid(row=0,column=0,columnspan=2)
     empty1=tk.Label(getdate,text=" ").grid(row=1,column=0,columnspan=2)
     datelabel=tk.Label(getdate,text="Select the date:- ",font=("Times New Roman",16)).grid(row=2,column=0)
-    expensedateInput= tkc.DateEntry(getdate,width=18,font=("Times New Roman",16))
-    expensedateInput.grid(row=2,column=1)
+    dateinput= tkc.DateEntry(getdate,width=18,font=("Times New Roman",16))
+    dateinput.grid(row=2,column=1)
+    empty4=tk.Label(getdate,text=" ").grid(row=3,column=0,columnspan=2)
+    date=dateinput.get_date()
+    display=tk.Button(getdate,text="Display",padx=10,width=10,bg="red",font=("Times New Roman",16),command=lambda: displayDate(getdate,username,date)).grid(row=4,column=0,columnspan=2)
+########################################################################################################################################################
+def displayDate(getdate,username,date):
+    getdate.destroy()
+    q="select * from "+username+" where dateofexpense='"+str(date)+"'"
+    cur.execute(q)
+    rows=cur.fetchall()
+
+    displaydate=tk.Tk()
+    displaydate.geometry('500x500')
+    displaydate.resizable(False,False)
+    displaydate.title("Enter month")
+
+    main_frame=ttk.Frame(displaydate)
+    main_frame.pack(fill=BOTH,expand=1)
+    my_canvas=tk.Canvas(main_frame)
+    my_canvas.pack(side=LEFT,fill=BOTH,expand=1)
+    my_scrollbar=ttk.Scrollbar(main_frame,orient=VERTICAL,command=my_canvas.yview)
+    my_scrollbar.pack(side=RIGHT,fill=Y)
+    my_canvas.configure(yscrollcommand=my_scrollbar.set)
+    my_canvas.bind('<Configure>',lambda e:my_canvas.configure(scrollregion=my_canvas.bbox("all")))
+    second_frame=ttk.Frame(my_canvas)
+    my_canvas.create_window((0,0),window=second_frame,anchor="nw")
+
+    head=tk.Label(second_frame,text="Personal Expense Tracker",pady=10,font=("Impact",20),background="red",width=40).grid(row=0,column=0,columnspan=4)
+    empty1=tk.Label(second_frame,text=" ").grid(row=1,column=0,columnspan=4)
+    
+    if len(rows)==0:
+        messagebox.showwarning("Warning","No details found")
+        gotoDash(displaydate,username)
+    col2=tk.Label(second_frame,text="Date",font=("Times New Roman",14)).grid(row=2,column=0)
+    col3=tk.Label(second_frame,text="Expense",font=("Times New Roman",14)).grid(row=2,column=1)
+    col4=tk.Label(second_frame,text="Price",font=("Times New Roman",14)).grid(row=2,column=2)
+    empty2=tk.Label(second_frame,text=" ").grid(row=3,column=0,columnspan=4)
+    j=0
+    k=0
+    for i in (rows):
+        r1=tk.Label(second_frame,text=i[2],font=("Times New Roman",14)).grid(row=j+4,column=0)
+        r2=tk.Label(second_frame,text=i[0],font=("Times New Roman",14)).grid(row=j+4,column=1)
+        r3=tk.Label(second_frame,text=i[1],font=("Times New Roman",14)).grid(row=j+4,column=2)
+        j=j+2
+        k=k+1
+    e=tk.Label(second_frame,text=" ").grid(row=j+4,column=0,columnspan=4)
+    q="select expensename, sum(price) from "+username+" where dateofexpense= '"+str(date)+"' group by expensename"
+    j=j+5
+    k=0
+    col1=tk.Label(second_frame,text="S.No",font=("Times New Roman",14)).grid(row=j+1,column=0)
+    col2=tk.Label(second_frame,text="Expense",font=("Times New Roman",14)).grid(row=j+1,column=1)
+    col3=tk.Label(second_frame,text="Price",font=("Times New Roman",14)).grid(row=j+1,column=2)
+    j=j+1
+    cur.execute(q)
+    rows=cur.fetchall()
+    for i in (rows):
+        r0=tk.Label(second_frame,text=str(k+1)+".",font=("Times New Roman",16)).grid(row=j+4,column=0)
+        r2=tk.Label(second_frame,text=i[0],font=("Times New Roman",16)).grid(row=j+4,column=1)
+        r3=tk.Label(second_frame,text=i[1],font=("Times New Roman",16)).grid(row=j+4,column=2)
+        j=j+2
+        k=k+1
+
+    empty3=tk.Label(second_frame,text=" ").grid(row=j+4,column=0,columnspan=4)
+    Back=tk.Button(second_frame,text="Back",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda:gotoDash(displaydate,username)).grid(row=j+5,column=0,columnspan=2)
+    Logout=tk.Button(second_frame,text="Logout",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda:gotoHome(displaydate)).grid(row=j+5,column=2,columnspan=2)
+    empty4=tk.Label(second_frame,text=" ").grid(row=j+6,column=0,columnspan=4)
+
+    
+    
 
 ######################################################################################################################################################################
 def submitexpense(enter,username,expensenameInput,expenseamountInput,expensedateInput):
