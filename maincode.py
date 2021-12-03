@@ -205,14 +205,16 @@ def getDate(dash,username):
     dateinput= tkc.DateEntry(getdate,width=18,font=("Times New Roman",16))
     dateinput.grid(row=2,column=1)
     empty4=tk.Label(getdate,text=" ").grid(row=3,column=0,columnspan=2)
-    date=dateinput.get_date()
-    display=tk.Button(getdate,text="Display",padx=10,width=10,bg="red",font=("Times New Roman",16),command=lambda: displayDate(getdate,username,date)).grid(row=4,column=0,columnspan=2)
+    display=tk.Button(getdate,text="Display",padx=10,width=10,bg="red",font=("Times New Roman",16),command=lambda: displayDate(getdate,username,dateinput)).grid(row=4,column=0,columnspan=2)
 ########################################################################################################################################################
-def displayDate(getdate,username,date):
+def displayDate(getdate,username,dateinput):
+    date=dateinput.get_date()
     getdate.destroy()
     q="select * from "+username+" where dateofexpense='"+str(date)+"'"
+    print(q)
     cur.execute(q)
     rows=cur.fetchall()
+    print(rows)
 
     displaydate=tk.Tk()
     displaydate.geometry('500x500')
@@ -269,15 +271,14 @@ def displayDate(getdate,username,date):
     Back=tk.Button(second_frame,text="Back",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda:gotoDash(displaydate,username)).grid(row=j+5,column=0,columnspan=2)
     Logout=tk.Button(second_frame,text="Logout",padx=10,width=7,bg="red",font=("Times New Roman",12),command=lambda:gotoHome(displaydate)).grid(row=j+5,column=2,columnspan=2)
     empty4=tk.Label(second_frame,text=" ").grid(row=j+6,column=0,columnspan=4)
-
-    
-    
-
 ######################################################################################################################################################################
 def submitexpense(enter,username,expensenameInput,expenseamountInput,expensedateInput):
     name=expensenameInput.get()
     amount=expenseamountInput.get()
     date=expensedateInput.get_date()
+    if amount not in range(1,100000):
+        messagebox.showwarning("Warning","Amount not in a limit")
+        return
     username.replace("\'","")
     cur.execute("use miniproject")
     sql="insert into "+username+"(expensename, price, dateofexpense) values(%s,%s,%s)"
